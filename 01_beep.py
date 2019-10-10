@@ -8,5 +8,6 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color,
 from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
 
-# Write your program here
+import time
+
 brick.sound.beep()
