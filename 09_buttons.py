@@ -7,18 +7,21 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color,
                                  SoundFile, ImageFile, Align)
 from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
-
 import time
 
-brick.sound.beep()
-
-motor = Motor(Port.B)
-
-# motor.angle() # get angle (int)
-# motor.run(speed) # speed: deg/s
-# motor.run_angle()
-
 while True:
-    print(motor.angle())
-    wait(10)
-
+    if Button.CENTER in brick.buttons():
+        brick.sound.beep(100)
+        wait(100)
+    elif Button.UP in brick.buttons():
+        brick.sound.beep(200)
+        wait(100)
+    elif Button.DOWN in brick.buttons():
+        brick.sound.beep(300)
+        wait(100)
+    elif Button.LEFT in brick.buttons():
+        brick.sound.beep(400)
+        wait(100)
+    elif Button.RIGHT in brick.buttons():
+        brick.sound.beep(500)
+        wait(100)

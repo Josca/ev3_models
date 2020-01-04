@@ -7,35 +7,24 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color,
                                  SoundFile, ImageFile, Align)
 from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
-
 import time
 
-brick.sound.beep()
-
+# Write your program here
 left_motor = Motor(Port.C)
 right_motor = Motor(Port.B)
 wheel_diameter = 56
 axle_track = 114
 
 robot = DriveBase(left_motor, right_motor, wheel_diameter, axle_track)
-gyro_sensor = GyroSensor(Port.S2)
+touch_sensor = TouchSensor(Port.S1)
+color_sensor = ColorSensor(Port.S3)
 
-angle_prev = gyro_sensor.angle()
-angle_sum = 0
-angle_delta_prev = 0
-wait(10)
-P = 35
-I = 8
-D = 20
-limit = 500
+brick.sound.beep()
 while True:
-    angle = gyro_sensor.angle()
-    angle_delta = angle - angle_prev
-    angle_sum += angle_delta 
-    power = P * angle_delta + I * angle_sum + D * (angle_delta - angle_delta_prev)
-    angle_delta_prev = angle_delta
-    if power > limit: power = limit
-    if power < -limit: power = -limit
-    print(angle_delta, power)
-    robot.drive(power, 0)
-    wait(1)
+    while touch_sensor.pressed():
+        robot.drive(-150, 0)
+        wait(10)
+    if color_sensor.color() == 3:
+        brick.sound.beep()
+        time.sleep(1)
+    robot.stop()
