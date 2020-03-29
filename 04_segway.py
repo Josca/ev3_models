@@ -10,7 +10,7 @@ from pybricks.robotics import DriveBase
 
 import time
 
-brick.sound.beep()
+# brick.sound.beep()
 
 left_motor = Motor(Port.C)
 right_motor = Motor(Port.B)
@@ -22,36 +22,40 @@ gyro_sensor = GyroSensor(Port.S2)
 
 # calibrate_gyro(gyro_sensor)
 
-angle_prev = gyro_sensor.angle()
+# angle_0 = gyro_sensor.angle()
+angle_0 = 0
 angle_sum = 0
 angle_delta_prev = 0
 wait(10)
 # P = -55
 # I = -26
 # D = -7
-P = 25
-I = 0
+P = 1.6
+I = 0.3
 D = 0
-limit = 200
+limit = 100
+print("GO")
 while True:
     if Button.RIGHT in brick.buttons():
-        P = P + 1
+        P = P + .1
     elif Button.LEFT in brick.buttons():
-        P = P - 1
+        P = P - .1
     elif Button.UP in brick.buttons():
-        I = I + 1
+        I = I + .01
     elif Button.DOWN in brick.buttons():
-        I = I - 1
-    print("P:", P, "I:", I)
-
-    angle = gyro_sensor.angle()
-    angle_delta = angle - angle_prev
-    angle_sum += angle_delta 
-    power =  P * angle_delta + I * angle_sum + D * (angle_delta - angle_delta_prev)
-    angle_prev = angle
-    angle_delta_prev = angle_delta
+        I = I - .01
+    #print("P:", P, "I:", I)
+    angle = gyro_sensor.speed()
+    #angle_delta = angle_0 - angle
+    angle_sum += angle
+    # power =  P * angle_delta + I * angle_sum + D * (angle_delta - angle_delta_prev)
+    power = P * angle + I * angle_sum
+    #angle_prev = angle
+    #angle_delta_prev = angle_delta
     if power > limit: power = limit
     if power < -limit: power = -limit
-    print("a:", angle, "d:", angle_delta, "p:", power)
-    robot.drive(power, 0)
-    wait(4)
+    # print("s:", angle, "d:", angle_delta, "p:", power)
+    #print("s:", angle, "p:", power, "P:", P, "I:", I, "sum:", angle_sum)
+    left_motor.dc(power)
+    right_motor.dc(power)
+    # wait(5)
