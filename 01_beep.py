@@ -11,3 +11,5 @@ from pybricks.robotics import DriveBase
 import time
 
 brick.sound.beep()
+wait(100)
+brick.sound.beep()
