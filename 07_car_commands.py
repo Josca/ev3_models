@@ -35,6 +35,14 @@ distance_sensor = UltrasonicSensor(Port.S4)
 
 ev3.speaker.say("Hello!")
 
+def update_colors(colors, color):
+    "Update colors array, aggregate values of the same type"
+    if len(colors) > 0 and colors[-1][0] == color[0]:
+        colors[-1][1] += color[1]
+    else:
+        colors.append(color)
+
+
 def try_get_commands(prev_colors):
     colors = []
     while True:
@@ -48,16 +56,17 @@ def try_get_commands(prev_colors):
             continue
         c = color_sensor.color()
         print(c)
-        print(colors)
         if c == Color.RED:
             ev3.speaker.say("red, rights")
-            colors.append(c)
+            update_colors(colors, [c, -90])
         elif c == Color.BLUE:
             ev3.speaker.say("blue, left")
-            colors.append(c)
+            update_colors(colors, [c, 90])
         elif c == Color.GREEN:
             ev3.speaker.say("green, go")
-            colors.append(c)
+            update_colors(colors, [c, 100])
+        print(colors)
+
 
 colors = []
 while True:
@@ -65,13 +74,13 @@ while True:
     print("run", colors)
     if colors == []:
         continue
-    for c in colors:
+    for c, v in colors:
         if c == Color.RED:
             ev3.speaker.say("right")
-            driveBase.turn(angle=-90)
+            driveBase.turn(angle=v)
         elif c == Color.BLUE:
             ev3.speaker.say("left")
-            driveBase.turn(angle=90)
+            driveBase.turn(angle=v)
         elif c == Color.GREEN:
-            driveBase.straight(distance=100)
+            driveBase.straight(distance=v)
     ev3.speaker.say("I am here!")
