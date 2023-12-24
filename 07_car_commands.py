@@ -42,6 +42,13 @@ def update_colors(colors, color):
     else:
         colors.append(color)
 
+def go_to_wall(speed):
+    if distance_sensor.distance() > 100:
+        driveBase.drive(speed, 0)
+        while True:
+            if distance_sensor.distance() < 100:
+                driveBase.stop()
+                break
 
 def try_get_commands(prev_colors):
     colors = []
@@ -63,8 +70,20 @@ def try_get_commands(prev_colors):
             ev3.speaker.say("blue, left")
             update_colors(colors, [c, 90])
         elif c == Color.GREEN:
-            ev3.speaker.say("green, go")
+            ev3.speaker.say("green, forward")
             update_colors(colors, [c, 100])
+        elif c == Color.BLACK:
+            ev3.speaker.say("black, back")
+            update_colors(colors, [c, -100])
+        elif c == Color.WHITE:
+            ev3.speaker.say("white, go to wall")
+            update_colors(colors, [c, 100])
+        # elif c == Color.YELLOW:
+        #     ev3.speaker.say("white, go to distance")
+        #     update_colors(colors, [c, 100])
+        # elif c == Color.BROWN:
+        #     ev3.speaker.say("white, go to distance")
+        #     update_colors(colors, [c, 100])
         print(colors)
 
 
@@ -82,5 +101,16 @@ while True:
             ev3.speaker.say("left")
             driveBase.turn(angle=v)
         elif c == Color.GREEN:
+            ev3.speaker.say("forward")
             driveBase.straight(distance=v)
+        elif c == Color.BLACK:
+            ev3.speaker.say("back")
+            driveBase.straight(distance=v)
+        elif c == Color.WHITE:
+            ev3.speaker.say("go to wall")
+            go_to_wall(speed=v)
+        # elif c == Color.YELLOW:
+        #     ev3.speaker.say("yellow placeholder")
+        # elif c == Color.BROWN:
+        #     ev3.speaker.say("brown placeholder")
     ev3.speaker.say("I am here!")
